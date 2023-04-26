@@ -1,4 +1,3 @@
-import 'package:client/data/repositories/user/user_repository.dart';
 import 'package:client/data/services/navigation_service.dart';
 import 'package:client/view/common_widgets/utils/unfocus.dart';
 import 'package:flutter/material.dart';
@@ -13,7 +12,6 @@ class DF extends ConsumerWidget {
   const DF({super.key});
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final userState = ref.watch(userRepositoryProvider);
     return MaterialApp.router(
       routerConfig: ref.watch(navigationServiceProvider),
       theme: ThemeData(colorSchemeSeed: const Color(0xFF4FC3F7)),

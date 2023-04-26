@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import '../../../../const/color.dart';
-import '../../../../const/style.dart';
 
 class AuthTextField extends StatelessWidget {
   final TextEditingController? controller;
@@ -52,11 +50,9 @@ class AuthTextField extends StatelessWidget {
           borderRadius: BorderRadius.all(Radius.circular(30)),
           borderSide: BorderSide.none,
         ),
-        fillColor: kPrimary,
         filled: true,
         label: Text(
           labelText,
-          style: kButtonText,
         ),
       ),
     );

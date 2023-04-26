@@ -2,7 +2,7 @@ version: '3.8'
 services:
   postgres:
     image: postgres:15
-    container_name: double_faute
+    container_name: db_name
     ports:
       - 5432:5432
     volumes:
@@ -13,4 +13,4 @@ services:
       - POSTGRES_DB=${POSTGRES_DB}
 volumes:
   postgres:
-    name: double_faute
+    name: ${POSTGRES_DB_VOLUME_NAME}
