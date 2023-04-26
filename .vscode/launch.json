@@ -1,0 +1,38 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "client",
+            "cwd": "client",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "client (profile mode)",
+            "cwd": "client",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "client (release mode)",
+            "cwd": "client",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        },
+        {
+            "name": "server",
+            "cwd": "server",
+            "program": "bin/server.dart",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "debug builder",
+            "cwd": "client",
+            "request": "launch",
+            "type": "dart"
+        }
+    ]
+}

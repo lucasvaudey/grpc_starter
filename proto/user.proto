@@ -1,0 +1,48 @@
+syntax = "proto3";
+
+package df;
+
+service User {
+  rpc GetUserInfo(GetUserInfoRequest) returns (GetUserInfoResponse) {}
+  rpc Register(RegisterRequest) returns (AuthResponse) {}
+  rpc Login(LoginRequest) returns (AuthResponse) {}
+  rpc RefreshToken(RefreshTokenRequest) returns (AuthResponse) {}
+  rpc ChangePassword(ChangePasswordRequest) returns (AuthResponse) {}
+}
+
+message ChangePasswordRequest {
+  string old_password = 1;
+  string new_password = 2;
+}
+
+message RefreshTokenRequest { string refresh_token = 1; }
+
+message LoginRequest {
+  string emailOrPseudo = 1;
+  string password = 2;
+}
+
+message RegisterRequest {
+  string id = 1;
+  string name = 2;
+  string email = 3;
+  string password = 4;
+}
+
+message AuthResponse {
+  string id = 1;
+  Token token = 2;
+}
+
+message Token {
+  string access_token = 1;
+  string refresh_token = 2;
+}
+
+message GetUserInfoRequest { string id = 1; }
+
+message GetUserInfoResponse {
+  string id = 1;
+  string name = 2;
+  string email = 3;
+}

@@ -1,0 +1,132 @@
+generator client {
+    provider = "dart run orm"
+    output   = "../lib/generated"
+}
+
+datasource db {
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+}
+
+model UserDb {
+    id                  String               @id @default(uuid()) @db.Uuid
+    name                String               @unique
+    email               String               @unique
+    password            String
+    ranking             RankingDb            @default(rNC)
+    club                ClubDb?              @relation(fields: [clubId], references: [id])
+    clubId              String?              @db.Uuid
+    address             Address?             @relation(fields: [addressId], references: [id])
+    addressId           String?              @unique @db.Uuid
+    disponibility       Disponibility[]
+    messagesSend        ChatMessage[]        @relation("MessagesSend")
+    messagesReceived    ChatMessage[]        @relation("MessagesReceived")
+    gameRequestSend     GameRequest[]        @relation("GameRequestSend")
+    gameRequestReceived GameRequestOnUsers[]
+    following           UserDb[]             @relation("UserFollow")
+    followedBy          UserDb[]             @relation("UserFollow")
+    settings            SettingsPrivacy?
+    settingsPrivacyId   String?              @db.Uuid
+}
+
+model SettingsPrivacy {
+    id                         String  @id @unique @default(uuid()) @db.Uuid
+    onlyFriendsCanSeeMyProfile Boolean @default(false)
+    UserDb                     UserDb  @relation(fields: [userDbId], references: [id])
+    userDbId                   String  @unique @db.Uuid
+}
+
+model Disponibility {
+    id              String   @unique @default(uuid()) @db.Uuid
+    UserDb          UserDb   @relation(fields: [userDbId], references: [id])
+    userDbId        String   @db.Uuid
+    startTime       DateTime @db.Timestamp
+    endTime         DateTime @db.Timestamp
+    weekday         Weekday
+    repeatEachWeek  Boolean  @default(false)
+    repeatEachMonth Boolean  @default(false)
+}
+
+model ClubDb {
+    id        String   @id @unique @default(uuid()) @db.Uuid
+    name      String
+    users     UserDb[]
+    addressId String   @unique @db.Uuid
+    address   Address  @relation(fields: [addressId], references: [id])
+}
+
+model Address {
+    id      String  @id @unique @default(uuid()) @db.Uuid
+    street  String?
+    city    String
+    zip     String?
+    country String
+    ClubDb  ClubDb?
+    UserDb  UserDb?
+}
+
+model ChatMessage {
+    id         String   @id @unique @default(uuid()) @db.Uuid
+    content    String
+    sender     UserDb   @relation(name: "MessagesSend", fields: [senderId], references: [id])
+    senderId   String   @db.Uuid
+    receiver   UserDb   @relation(name: "MessagesReceived", fields: [receiverId], references: [id])
+    receiverId String   @db.Uuid
+    timestamp  DateTime @db.Timestamp
+}
+
+//Game request is a request from a user to play with others users
+model GameRequest {
+    id        String               @id @unique @default(uuid()) @db.Uuid
+    sender    UserDb               @relation(name: "GameRequestSend", fields: [senderId], references: [id])
+    senderId  String               @db.Uuid
+    receivers GameRequestOnUsers[]
+    open      Boolean              @default(true)
+}
+
+model GameRequestOnUsers {
+    gameRequest   GameRequest @relation(fields: [gameRequestId], references: [id])
+    gameRequestId String      @db.Uuid
+    UserDb        UserDb      @relation(fields: [userDbId], references: [id])
+    userDbId      String      @db.Uuid
+    accepted      Boolean?
+
+    @@id([gameRequestId, userDbId])
+}
+
+enum RankingDb {
+    rNC
+    r30_5
+    r30_4
+    r30_3
+    r30_2
+    r30_1
+    r30
+    r15_5
+    r15_4
+    r15_3
+    r15_2
+    r15_1
+    r15
+    r5_6
+    r4_6
+    r3_6
+    r2_6
+    r1_6
+    r0
+    rn2_6
+    rn4_6
+    rn15
+    rPromotion
+    rTop_30
+}
+
+enum Weekday {
+    MONDAY
+    TUESDAY
+    WEDNESDAY
+    THURSDAY
+    FRIDAY
+    SATURDAY
+    SUNDAY
+}
